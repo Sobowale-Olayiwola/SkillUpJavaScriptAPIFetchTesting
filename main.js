@@ -1,38 +1,33 @@
-const baseUrl = 'http://universities.hipolabs.com/search?country=United+States'
-const mainContent = document.querySelector('body');
-let html = '';
+const baseUrl = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita'
+let magaritahtmlSyntax = '';
+const margaritas = fetch( baseUrl );
 
-// async function universityProfile(){
-//     const university = fetch(baseUrl);
-//    console.log(university);
-//     const universityDetails = await university;
-//     console.log(universityDetails);
-//     const universityProperties = await universityDetails.json()
-//     console.log(universityProperties)
-
-// }
-// universityProfile()
-const universities = fetch(baseUrl);
-function wrapper( promiseObject ){
+function wrapMagaritaPromiseObject( promiseObject ){
     console.log( promiseObject );
-    // promiseObject.then( value => value.json() )
     promiseObject.then( value => value.json() ) 
     .then(value => {
         console.log( value );
-        for( index = 0; index <= 5; index += index ) {
+        console.log( value.drinks[0].strDrink );
+        for( index = 0; index <= 5; index++ ) {
             let htmlSegment = `<div class="user">
-            <h2> ${value[index].name}</h2>
-            <h2> Domain: ${value[index].domains[0]}</h2>
-            <a> WebPage: ${value[index].web_pages[0]} </a>
-            </div>
-            `;
-            html += htmlSegment;
+            <h2> ${value.drinks[index].strDrink} </h2>
+            <img src="${value.drinks[index].strDrinkThumb}">
+            <h3>List of Ingredients </h3>
+            <ul>
+                <li>${value.drinks[index].strIngredient1}</li>
+                <li>${value.drinks[index].strIngredient2}</li>
+                <li>${value.drinks[index].strIngredient3}</li>
+                <li>${value.drinks[index].strIngredient4}</li>
+            </ul>
+            <h3>Preparation of Drink</h3>
+            <p>${value.drinks[index].strInstructions}</p>
+            </div>`;
+            magaritahtmlSyntax += htmlSegment;
+            console.log(magaritahtmlSyntax)
             let container = document.querySelector('.container');
-    container.innerHTML = html;
+            container.innerHTML = magaritahtmlSyntax;
         }
     } )
-    .catch( error => error.message);
-
-    
+    .catch( error => error.message); 
 }
-wrapper(universities);
+addEventListener( 'load', wrapMagaritaPromiseObject(margaritas) );
